@@ -22,74 +22,36 @@ function getCategoryColor(category) {
 
 // --- CORE LOGIC ---
 
-// 1. Detect games by scanning for config.json files
+// 1. Load games from game-index.json
 async function detectGames() {
     try {
-        console.log('Scanning for games with config.json...');
-        const response = await fetch(GAMES_FOLDER);
+        console.log('Loading games from game-index.json...');
+        const response = await fetch(`${GAMES_FOLDER}game-index.json`);
 
         if (!response.ok) {
-            throw new Error('Cannot access games directory');
+            throw new Error('Cannot load game-index.json');
         }
 
-        const text = await response.text();
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(text, 'text/html');
-        const links = Array.from(doc.querySelectorAll('a'));
+        const gamesData = await response.json();
 
-        const detectedGames = [];
+        // Transform the data to match our internal format
+        const games = gamesData.map(gameData => ({
+            id: gameData.folder,
+            title: gameData.name,
+            type: 'game',
+            folder: gameData.folder,
+            category: gameData.category || 'Casual',
+            color: getCategoryColor(gameData.category || 'Casual'),
+            size: gameData.size || 'normal',
+            thumbnail: gameData.thumbnail || 'thumbnail.jpg',
+            description: gameData.description || ''
+        }));
 
-        for (const link of links) {
-            const href = link.getAttribute('href');
-            if (href === '../' || href === '/' || href.startsWith('?')) continue;
-
-            let folderName = href.replace(/\/$/, '');
-            folderName = folderName.replace(/^\//, '').replace(/^games\//, '');
-
-            if (folderName.includes('.') || !folderName || folderName === 'games' || folderName === '..') continue;
-
-            console.log('Checking folder:', folderName);
-
-            // Try to load config.json for this game
-            try {
-                const configResponse = await fetch(`${GAMES_FOLDER}${folderName}/config.json`);
-                if (!configResponse.ok) {
-                    console.warn(`Skipping ${folderName}: no config.json found`);
-                    continue;
-                }
-
-                const config = await configResponse.json();
-
-                const game = {
-                    id: folderName,
-                    title: config.title || formatTitle(folderName),
-                    type: 'game',
-                    folder: folderName,
-                    category: config.category || 'Casual',
-                    color: getCategoryColor(config.category || 'Casual'),
-                    size: config.size || 'normal',
-                    thumbnail: config.thumbnail || 'thumbnail.jpg',
-                    description: config.description || ''
-                };
-
-                detectedGames.push(game);
-                console.log(`Loaded game: ${game.title}`);
-            } catch (e) {
-                console.warn(`Error loading config for ${folderName}:`, e);
-                continue;
-            }
-        }
-
-        if (detectedGames.length > 0) {
-            console.log(`Successfully detected ${detectedGames.length} games.`);
-            return detectedGames;
-        } else {
-            console.warn('No games found with valid config.json files');
-            return [];
-        }
+        console.log(`Successfully loaded ${games.length} games from index.`);
+        return games;
 
     } catch (e) {
-        console.error('Failed to detect games:', e);
+        console.error('Failed to load games from index:', e);
         return [];
     }
 }
@@ -119,8 +81,8 @@ function renderGrid(data) {
         const tile = document.createElement('div');
         tile.className = `tile ${item.size}`;
 
-        // Game Tile
-        const localThumb = `${GAMES_FOLDER}${item.folder}/${item.thumbnail}`;
+        // Game Tile - thumbnail already has the full path from game-index.json
+        const localThumb = item.thumbnail;
         // Fallback if local thumb fails (using onerror)
         const fallbackThumb = `https://placehold.co/600x600/${item.color.replace('#', '')}/ffffff?text=${encodeURIComponent(item.title)}`;
 
