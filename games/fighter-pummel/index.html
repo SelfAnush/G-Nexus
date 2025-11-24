@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fighter Pummel: ULTIMATE</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- Modern, Sci-Fi/Tech Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,400;0,700;1,900&family=Orbitron:wght@400;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="game.css">
+</head>
+
+<body>
+
+    <div id="start-screen">
+        <div class="title-wrapper">
+            <h1>FIGHTER PUMMEL</h1>
+            <h2>Ultimate Edition</h2>
+        </div>
+        <button id="start-btn" class="game-btn" onclick="startGame()">Initiate</button>
+    </div>
+
+    <div id="game-ui">
+        <div class="vs-logo">VS</div>
+        <div class="hud-container">
+            <div class="player-hud">
+                <div class="player-name" style="color: #ffcc00">Player 1</div>
+                <div class="bar-container">
+                    <div id="p1-hp" class="bar-fill"></div>
+                </div>
+                <div class="special-bar-container">
+                    <div id="p1-sp" class="special-fill"></div>
+                </div>
+                <div id="p1-combo" class="combo-counter">COMBO</div>
+            </div>
+            <div class="player-hud" style="align-items: flex-end;">
+                <div class="player-name" style="color: #ff5500">Player 2</div>
+                <div class="bar-container">
+                    <div id="p2-hp" class="bar-fill"></div>
+                </div>
+                <div class="special-bar-container">
+                    <div id="p2-sp" class="special-fill"></div>
+                </div>
+                <div id="p2-combo" class="combo-counter">COMBO</div>
+            </div>
+        </div>
+
+        <div id="message-overlay">
+            <div id="main-text">FIGHT!</div>
+            <button id="rematch-btn" class="game-btn" onclick="resetGame()">Re-Engage</button>
+        </div>
+
+        <div id="controls-hint">
+            <span style="color:#ffcc00">P1:</span> <span class="key">WASD</span> Move | <span class="key">L-Click</span>
+            Atk | <span class="key">R-Click</span> Block | <span class="key special">E</span> ULT | <span
+                class="key">1</span> Burst
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <span style="color:#ff5500">P2 (CPU):</span> <span class="key">ARROWS</span> Move | <span
+                class="key">L</span> Atk | <span class="key">K</span> Block | <span class="key special">I</span> ULT |
+            <span class="key">M</span> Burst
+        </div>
+    </div>
+
+    <div id="flash-overlay"></div>
+
+    <script src="game.js"></script>
+</body>
+
+</html>
