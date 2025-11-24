@@ -1,0 +1,47 @@
+name: Update Games Index
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'games/**'
+  workflow_dispatch:
+
+jobs:
+  update-index:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate games/index.html
+        run: |
+          cd games
+          echo "<!DOCTYPE html><html><body><h1>Games Directory</h1><ul>" > index.html
+          for d in */; do
+            if [ -d "$d" ]; then
+                dirname=$(basename "$d")
+                echo "<li><a href=\"$dirname/\">$dirname/</a></li>" >> index.html
+            fi
+          done
+          echo "</ul></body></html>" >> index.html
+          cd ..
+
+      - name: Commit and Push changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add games/index.html
+          # Only commit if there are changes
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Auto-update games/index.html"
+            git push
+          fi
