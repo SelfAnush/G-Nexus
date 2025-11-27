@@ -633,6 +633,9 @@ const Game = {
     fpsTime: 0,
     currentFps: 0,
 
+    // Track if settings were opened from pause menu
+    settingsOpenedFromPause: false,
+
     init() {
         this.setupThreeJS();
         this.createEnvironment();
@@ -894,6 +897,7 @@ const Game = {
         });
 
         document.getElementById('settings-btn')?.addEventListener('click', () => {
+            this.settingsOpenedFromPause = false;
             this.openSettings();
         });
 
@@ -909,7 +913,16 @@ const Game = {
             this.togglePause();
         });
 
+        // Fix: Pause menu settings button opens settings modal as overlay
         document.getElementById('pause-settings-btn')?.addEventListener('click', () => {
+            // Hide pause menu first
+            const pauseMenu = document.getElementById('pause-menu');
+            if (pauseMenu) {
+                pauseMenu.classList.remove('visible');
+            }
+            // Mark that settings was opened from pause
+            this.settingsOpenedFromPause = true;
+            // Open settings modal as separate overlay
             this.openSettings();
         });
 
@@ -985,6 +998,15 @@ const Game = {
             modal.classList.remove('visible');
         }
         this.saveSettings();
+
+        // If settings was opened from pause menu, return to pause menu
+        if (this.settingsOpenedFromPause && this.state === 'PAUSED') {
+            const pauseMenu = document.getElementById('pause-menu');
+            if (pauseMenu) {
+                pauseMenu.classList.add('visible');
+            }
+            this.settingsOpenedFromPause = false;
+        }
     },
 
     resetSettings() {
