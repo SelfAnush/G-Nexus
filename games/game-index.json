@@ -3,7 +3,7 @@
     "name": "Fighter Pummel: ULTIMATE",
     "path": "games/fighter-pummel",
     "folder": "fighter-pummel",
-    "description": "Epic 3D fighting game with dynamic combat and special moves",
+    "description": "Epic 3D fighting game with dynamic combat, special moves, and AI opponents. Features round-based matches, combo system, and responsive controls.",
     "category": "Action",
     "thumbnail": "games/fighter-pummel/thumbnail.png"
   }
