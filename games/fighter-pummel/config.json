@@ -1,7 +1,32 @@
 {
     "title": "Fighter Pummel: ULTIMATE",
     "category": "Action",
-    "size": "normal",
+    "size": "large",
     "thumbnail": "thumbnail.png",
-    "description": "Epic 3D fighting game with dynamic combat and special moves"
+    "description": "Epic 3D fighting game with dynamic combat, special moves, and AI opponents. Features round-based matches, combo system, and responsive controls.",
+    "version": "2.0.0",
+    "controls": {
+        "player1": {
+            "move": "WASD",
+            "attack": "Left Click",
+            "block": "Right Click",
+            "special": "E",
+            "dash": "Shift"
+        },
+        "player2": {
+            "move": "Arrow Keys",
+            "attack": "L",
+            "block": "K",
+            "special": "I",
+            "dash": "M"
+        }
+    },
+    "features": [
+        "3D Graphics with Three.js",
+        "AI Difficulty Levels",
+        "Combo System",
+        "Special Moves",
+        "Mobile Touch Controls",
+        "Round-based Matches"
+    ]
 }
