@@ -4,14 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="G-NEXUS - AI Powered Gaming Hub. Play browser games instantly.">
     <title>G-NEXUS | AI Powered Gaming</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@500;600;700;800&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700;800;900&display=swap" rel="stylesheet">
 
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -22,31 +21,56 @@
 
 <body data-theme="dark">
 
-    <nav>
-        <a href="#" class="logo">
-            <div class="logo-icon"><i class="fa-solid fa-atom"></i></div>
-            G-NEXUS
+    <!-- Animated Background -->
+    <div class="bg-gradient" aria-hidden="true"></div>
+
+    <!-- Navigation -->
+    <nav role="navigation" aria-label="Main navigation">
+        <a href="#" class="logo" aria-label="G-NEXUS Home">
+            <div class="logo-icon"><i class="fa-solid fa-gamepad" aria-hidden="true"></i></div>
+            <span class="logo-text">G-NEXUS</span>
         </a>
 
         <div class="nav-center">
             <div class="search-bar">
-                <i class="fa-solid fa-search search-icon"></i>
-                <input type="text" class="search-input" placeholder="Search games..." id="searchInput">
+                <i class="fa-solid fa-search search-icon" aria-hidden="true"></i>
+                <input type="text" class="search-input" placeholder="Search games..." id="searchInput" aria-label="Search games">
+                <kbd class="search-shortcut">/</kbd>
             </div>
         </div>
 
         <div class="nav-right">
-            <div class="theme-toggle" id="themeToggle" title="Switch Theme">
-                <i class="fa-regular fa-moon"></i>
-            </div>
+            <button class="theme-toggle" id="themeToggle" title="Switch Theme" aria-label="Toggle dark/light theme">
+                <i class="fa-regular fa-moon" aria-hidden="true"></i>
+            </button>
+            <button class="nav-menu-btn" id="navMenuBtn" aria-label="Menu">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
         </div>
     </nav>
 
     <main>
-        <!-- The Bento Grid -->
-        <div class="bento-grid" id="gameGrid">
-            <!-- Tiles injected by JS -->
-        </div>
+        <!-- Games Section -->
+        <section class="games-section">
+            <div class="section-header">
+                <h2 class="section-title">Featured Games</h2>
+                <span class="game-count" id="gameCount">0 games</span>
+            </div>
+
+            <!-- The Bento Grid -->
+            <div class="bento-grid" id="gameGrid">
+                <!-- Tiles injected by JS -->
+            </div>
+
+            <!-- Empty State -->
+            <div class="empty-state" id="emptyState">
+                <div class="empty-icon">
+                    <i class="fa-solid fa-ghost"></i>
+                </div>
+                <h3>No games found</h3>
+                <p>Try adjusting your search criteria</p>
+            </div>
+        </section>
     </main>
 
     <!-- External JavaScript -->

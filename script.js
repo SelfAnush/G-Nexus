@@ -3,19 +3,22 @@ const GAMES_FOLDER = 'games/';
 
 // --- STATE ---
 let gamesDB = [];
+
 const grid = document.getElementById('gameGrid');
 const searchInput = document.getElementById('searchInput');
+const gameCountEl = document.getElementById('gameCount');
+const emptyState = document.getElementById('emptyState');
 
 // --- UTILS ---
 function getCategoryColor(category) {
     const colors = {
-        'Racing': '#3b82f6',   // Blue
-        'Action': '#f43f5e',   // Red/Pink
-        'Puzzle': '#8b5cf6',   // Purple
-        'Adventure': '#22c55e', // Green
-        'Simulation': '#84cc16', // Lime
-        'Sports': '#eab308',   // Yellow
-        'Casual': '#06b6d4'    // Cyan
+        'Racing': '#3b82f6',
+        'Action': '#f43f5e',
+        'Puzzle': '#8b5cf6',
+        'Adventure': '#22c55e',
+        'Simulation': '#84cc16',
+        'Sports': '#eab308',
+        'Casual': '#06b6d4'
     };
     return colors[category] || '#64748b';
 }
@@ -34,7 +37,6 @@ async function detectGames() {
 
         const gamesData = await response.json();
 
-        // Transform the data to match our internal format
         const games = gamesData.map(gameData => ({
             id: gameData.folder,
             title: gameData.name,
@@ -42,7 +44,6 @@ async function detectGames() {
             folder: gameData.folder,
             category: gameData.category || 'Casual',
             color: getCategoryColor(gameData.category || 'Casual'),
-            size: gameData.size || 'normal',
             thumbnail: gameData.thumbnail || 'thumbnail.jpg',
             description: gameData.description || ''
         }));
@@ -66,33 +67,58 @@ function formatTitle(folderName) {
 
 // 2. Initialize the App
 async function initApp() {
-    // Load Games
     const games = await detectGames();
-
     gamesDB = games;
     renderGrid(gamesDB);
+    setupKeyboardShortcut();
 }
 
-// 3. Render Function
+// 3. Filter games by search
+function filterGames() {
+    const searchTerm = searchInput.value.toLowerCase();
+    
+    let filtered = gamesDB;
+    
+    // Filter by search term
+    if (searchTerm) {
+        filtered = filtered.filter(game => 
+            game.title.toLowerCase().includes(searchTerm) ||
+            game.category.toLowerCase().includes(searchTerm)
+        );
+    }
+    
+    renderGrid(filtered);
+}
+
+// 4. Render Function
 function renderGrid(data) {
     grid.innerHTML = '';
+    
+    // Update game count
+    gameCountEl.textContent = `${data.length} game${data.length !== 1 ? 's' : ''}`;
+    
+    // Show/hide empty state
+    if (data.length === 0) {
+        emptyState.classList.add('visible');
+        grid.style.display = 'none';
+    } else {
+        emptyState.classList.remove('visible');
+        grid.style.display = 'grid';
+    }
 
-    data.forEach(item => {
+    data.forEach((item, index) => {
         const tile = document.createElement('div');
-        tile.className = `tile ${item.size}`;
+        tile.className = 'tile';
+        tile.style.animationDelay = `${index * 0.03}s`;
 
-        // Game Tile - thumbnail already has the full path from game-index.json
         const localThumb = item.thumbnail;
-        // Fallback if local thumb fails (using onerror)
-        const fallbackThumb = `https://placehold.co/600x600/${item.color.replace('#', '')}/ffffff?text=${encodeURIComponent(item.title)}`;
+        const fallbackThumb = `https://placehold.co/300x400/${item.color.replace('#', '')}/ffffff?text=${encodeURIComponent(item.title)}`;
 
         tile.innerHTML = `
-            <img src="${localThumb}" class="game-img" onerror="this.src='${fallbackThumb}'" alt="${item.title}">
+            <img src="${localThumb}" class="game-img" onerror="this.src='${fallbackThumb}'" alt="${item.title}" loading="lazy">
             <div class="tile-overlay">
                 <div class="tile-title">${item.title}</div>
-                <div class="tile-meta">
-                    <span>${item.category}</span>
-                </div>
+                <div class="tile-meta">${item.category}</div>
             </div>
             <div class="play-overlay"><i class="fa-solid fa-play"></i></div>
         `;
@@ -105,9 +131,27 @@ function renderGrid(data) {
     });
 }
 
+// 5. Keyboard shortcut for search
+function setupKeyboardShortcut() {
+    document.addEventListener('keydown', (e) => {
+        // Press '/' to focus search
+        if (e.key === '/' && document.activeElement !== searchInput) {
+            e.preventDefault();
+            searchInput.focus();
+        }
+        // Press 'Escape' to clear and blur search
+        if (e.key === 'Escape' && document.activeElement === searchInput) {
+            searchInput.value = '';
+            searchInput.blur();
+            filterGames();
+        }
+    });
+}
+
 // Event Listeners
 let isDark = true;
 const themeBtn = document.getElementById('themeToggle');
+
 themeBtn.addEventListener('click', () => {
     isDark = !isDark;
     document.body.setAttribute('data-theme', isDark ? 'dark' : 'light');
@@ -116,10 +160,8 @@ themeBtn.addEventListener('click', () => {
         : '<i class="fa-regular fa-sun"></i>';
 });
 
-searchInput.addEventListener('input', (e) => {
-    const term = e.target.value.toLowerCase();
-    const results = gamesDB.filter(item => item.title.toLowerCase().includes(term));
-    renderGrid(results);
+searchInput.addEventListener('input', () => {
+    filterGames();
 });
 
 // Start
