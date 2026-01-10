@@ -1,0 +1,191 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap');
+
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #000000;
+            font-family: 'Rajdhani', sans-serif;
+            color: #d1d5db; /* Gray-300 */
+            user-select: none;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        /* Stealth/Ghost Glow Utilities */
+        .glow-text-white {
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5), 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+        
+        .stealth-box {
+            box-shadow: 0 0 0 1px #374151; /* Subtle border */
+            border: 1px solid #4b5563;
+            background: rgba(20, 20, 20, 0.8);
+            backdrop-filter: blur(5px);
+        }
+
+        .stealth-box:hover {
+            border-color: #e5e7eb;
+            background: rgba(40, 40, 40, 0.9);
+            transform: scale(1.02);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+        }
+
+        /* Unique Cyber Button Shape (Stealth Variant) */
+        .cyber-button {
+            position: relative;
+            display: inline-block;
+            padding: 2px;
+            background: #374151; /* Dark Gray Border */
+            clip-path: polygon(
+                20px 0, 100% 0, 
+                100% calc(100% - 20px), 
+                calc(100% - 20px) 100%, 
+                0 100%, 0 20px
+            );
+            cursor: pointer;
+            transition: transform 0.1s, filter 0.3s;
+        }
+
+        .cyber-button-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #0a0a0a; /* Almost Black */
+            color: #e5e7eb;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            padding: 15px 60px;
+            clip-path: polygon(
+                18px 0, 100% 0, 
+                100% calc(100% - 18px), 
+                calc(100% - 18px) 100%, 
+                0 100%, 0 18px
+            );
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .cyber-button:hover {
+            transform: scale(1.02);
+            background: #e5e7eb; /* White Border on Hover */
+        }
+
+        .cyber-button:hover .cyber-button-content {
+            background: #1f2937;
+            color: #fff;
+        }
+
+        .cyber-button:active {
+            transform: scale(0.98);
+        }
+        
+        /* Small Variant for Home Button */
+        .cyber-button.small {
+            padding: 1px;
+            clip-path: polygon(
+                10px 0, 100% 0, 
+                100% calc(100% - 10px), 
+                calc(100% - 10px) 100%, 
+                0 100%, 0 10px
+            );
+        }
+        .cyber-button.small .cyber-button-content {
+            padding: 8px 25px;
+            font-size: 1rem;
+            clip-path: polygon(
+                9px 0, 100% 0, 
+                100% calc(100% - 9px), 
+                calc(100% - 9px) 100%, 
+                0 100%, 0 9px
+            );
+        }
+
+        /* Continue Button Variant */
+        .cyber-button.continue {
+            background: #10b981; /* Emerald hint */
+        }
+        .cyber-button.continue .cyber-button-content {
+            color: #10b981;
+        }
+        .cyber-button.continue:hover .cyber-button-content {
+            color: #fff;
+        }
+
+        /* Retry Button Variant */
+        .cyber-button.retry {
+            background: #ef4444; /* Red hint */
+        }
+        .cyber-button.retry .cyber-button-content {
+            color: #ef4444;
+        }
+        .cyber-button.retry:hover .cyber-button-content {
+            color: #fff;
+        }
+
+        /* Screen Transitions */
+        .screen {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease-in-out;
+            z-index: 10;
+        }
+
+        .screen.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Loading Bar Animation */
+        @keyframes loadProgress {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+        
+        .loading-bar-fill {
+            width: 0%;
+            transition: width 0.2s;
+        }
+        .loading-active .loading-bar-fill {
+            animation: loadProgress 2s ease-out forwards;
+        }
+
+        /* Glitch Animation for Debuff */
+        @keyframes glitch-anim {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+        }
+        
+        .glitch-active {
+            animation: glitch-anim 0.2s infinite;
+            color: #ef4444; /* Red-500 */
+            text-shadow: 2px 0 #fff, -2px 0 #000;
+        }
+
+        ::-webkit-scrollbar { width: 0; }
+
+        .stage-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .stage-card:hover h3 {
+            color: #fff;
+        }
+        
+        #gameCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 5;
+            display: none; 
+        }

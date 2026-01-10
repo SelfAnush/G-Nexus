@@ -6,5 +6,13 @@
     "description": "Epic 3D fighting game with dynamic combat, special moves, and AI opponents. Features round-based matches, combo system, and responsive controls.",
     "category": "Action",
     "thumbnail": "games/fighter-pummel/thumbnail.png"
+  },
+  {
+    "name": "Invisible Maze",
+    "path": "games/Invisible-maze",
+    "folder": "Invisible-maze",
+    "description": "Navigate through an invisible maze using only sound and touch. Features intuitive controls, immersive audio cues, and challenging puzzles.",
+    "category": "Puzzle",
+    "thumbnail": "games/Invisible-maze/thumbnail.jpeg"
   }
 ]
